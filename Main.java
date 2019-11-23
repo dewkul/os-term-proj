@@ -3,6 +3,7 @@ import java.util.Arrays;
 
 import java.util.concurrent.*;
 public class Main{
+    // Job Queue will be in JobSched
     private static final BlockingQueue<Runnable> queue = new ArrayBlockingQueue<>(15);
     public static void main(String[] args) {
         Thread t = new Thread(() -> {
@@ -29,10 +30,10 @@ public class Main{
 
         GanttChart g = new GanttChart();
 
-        // Required data from CPUSched, for Gantt Chart
-        List<Integer> proc_id = Arrays.asList(0, 1, 2, 0, 1, 2);
-        List<Integer> exec_time = Arrays.asList(3, 3, 3, 2, 3, 1);
-        g.addAllProc(proc_id, exec_time);
+        // Required data for Gantt Chart
+        List<Integer> proc_id =     Arrays.asList(0, 1, 2, 0, 1, 2, 1);
+        List<Integer> exec_time =   Arrays.asList(3, 3, 3, 2, 3, 1, 1);
+        // g.addAllProc(proc_id, exec_time);
         g.display();
      }
 }
