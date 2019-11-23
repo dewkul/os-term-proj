@@ -1,5 +1,6 @@
 public class Job {
-    private int id, submitTime, CPUTime, CPUTimeLeft;
+    // private int id, submitTime;
+    private int CPUTime, CPUTimeLeft;
     
     private int startTime = 0, endTime = 0;
     
@@ -12,21 +13,21 @@ public class Job {
     
     private int arrivalTime,cpuTime,processId;
     
-    public Job(int id, int submitTime, int CPUTime, JobDoneEvent evt) {
-        super();
-        this.id = id;
-        this.submitTime = submitTime;
-        this.CPUTime = CPUTime;
-        this.CPUTimeLeft = CPUTime;
-        this.evt = evt;
-    }
+    // public Job(int id, int submitTime, int CPUTime, JobDoneEvent evt) {
+    //     super();
+    //     this.id = id;
+    //     this.submitTime = submitTime;
+    //     this.CPUTime = CPUTime;
+    //     this.CPUTimeLeft = CPUTime;
+    //     this.evt = evt;
+    // }
     
     public Job(int processId, int arrivalTime, int cpuTime) {
         
         this.processId = processId;
         this.arrivalTime = arrivalTime;
         this.cpuTime = cpuTime;
-        
+        this.CPUTimeLeft = CPUTime;
     }
     
     public void start(int sysTime) {
@@ -42,21 +43,21 @@ public class Job {
         
     }
     
-    public int getId() {
-        return id;
-    }
+    // public int getId() {
+    //     return id;
+    // }
     
-    public void setId(int id) {
-        this.id = id;
-    }
+    // public void setId(int id) {
+    //     this.id = id;
+    // }
     
-    public int getSubmitTime() {
-        return submitTime;
-    }
+    // public int getSubmitTime() {
+    //     return submitTime;
+    // }
     
-    public void setSubmitTime(int submitTime) {
-        this.submitTime = submitTime;
-    }
+    // public void setSubmitTime(int submitTime) {
+    //     this.submitTime = submitTime;
+    // }
     
     public int getCPUTime() {
         return CPUTime;
