@@ -6,12 +6,11 @@ class Process{
     int waitingTime;
     int turnAroundTime;
 
-    public Process(int processID, int burstTime, int remainBurstTime, int waitingTime, int turnAroundTime) {
+    public Process(int processID, int burstTime) {
         this.processID = processID;
         this.burstTime = burstTime;
-        this.remainBurstTime = remainBurstTime;
-        this.waitingTime = waitingTime;
-        this.turnAroundTime = turnAroundTime;
+
+        this.remainBurstTime = burstTime;
     }
 
     public int getProcessID() {
@@ -53,6 +52,14 @@ class Process{
     public void setTurnAroundTime(int turnAroundTime) {
         this.turnAroundTime = turnAroundTime;
     }
+
+    @Override
+    public String toString() {
+        return "Process [burstTime=" + burstTime + ", processID=" + processID + ", turnAroundTime=" + turnAroundTime
+                + ", waitingTime=" + waitingTime + "]";
+    }
+
+    
     
     
 }
@@ -62,6 +69,7 @@ public class CPUScheduler
     int timeQuantum;
     int currentTime = 0;
     int totalTime = 0;
+    int pIndex = 0;
 
     public CPUScheduler(ArrayList<Process> readyQueue, int timeQuantum) {
         this.readyQueue = readyQueue;
@@ -70,8 +78,20 @@ public class CPUScheduler
         for(int i = 0; i < readyQueue.size();i++){
             this.totalTime += readyQueue.get(i).burstTime;
         }
+
+        while(!readyQueue.isEmpty()){
+            this.readyQueue.get(pIndex).setRemainBurstTime(this.readyQueue.get(pIndex).getRemainBurstTime()-1);
+            if(this.readyQueue.get(pIndex).getRemainBurstTime()==0){
+                
+                System.out.println(this.readyQueue.get(pIndex).toString());
+            }
+
+            pIndex = (pIndex+1)%this.readyQueue.size();
+            this.currentTime++;
+        }
     }
     
+
     
 
 
