@@ -31,9 +31,9 @@ public class Main{
         GanttChart g = new GanttChart();
 
         // Required data for Gantt Chart
-        List<Integer> proc_id =     Arrays.asList(0, 1, 2, 0, 1, 2, 1);
-        List<Integer> exec_time =   Arrays.asList(3, 3, 3, 2, 3, 1, 1);
-        // g.addAllProc(proc_id, exec_time);
+        List<Integer> proc_id =     Arrays.asList(0, 1, 2, 0, 1, 2, 1, 2, 2);
+        List<Integer> exec_time =   Arrays.asList(3, 3, 3, 2, 3, 3, 1, 3, 1);
+        g.addAllProc(proc_id, exec_time);
         g.display();
      }
 }
