@@ -1,121 +1,62 @@
 public class Job {
-    // private int id, submitTime;
-    private int CPUTime, CPUTimeLeft;
-    
-    private int startTime = 0, endTime = 0;
-    
-    
-    public int ProcessCompletionTime;
-    public int processArrivalTime;
-    public int waitingTime;
-    public int turnAroundTime;
-    private JobDoneEvent evt;
-    
-    private int arrivalTime,cpuTime,processId;
-    
-    // public Job(int id, int submitTime, int CPUTime, JobDoneEvent evt) {
-    //     super();
-    //     this.id = id;
-    //     this.submitTime = submitTime;
-    //     this.CPUTime = CPUTime;
-    //     this.CPUTimeLeft = CPUTime;
-    //     this.evt = evt;
-    // }
-    
-    public Job(int processId, int arrivalTime, int cpuTime) {
-        
-        this.processId = processId;
-        this.arrivalTime = arrivalTime;
-        this.cpuTime = cpuTime;
-        this.CPUTimeLeft = CPUTime;
+    int processID;
+    int burstTime;
+    int remainBurstTime;
+    int waitingTime;
+    int turnAroundTime;
+
+    public Job(int processID, int burstTime) {
+        this.processID = processID;
+        this.burstTime = burstTime;
+
+        this.remainBurstTime = burstTime;
     }
-    
-    public void start(int sysTime) {
-        startTime = sysTime;
+
+    public int getProcessID() {
+        return processID;
     }
-    
-    public void tick(int sysTime) {
-        CPUTimeLeft --;
-        if (CPUTimeLeft <= 0){
-            endTime = sysTime;
-            evt.onFinish(this);
-        }
-        
+
+    public void setProcessID(int processID) {
+        this.processID = processID;
     }
-    
-    // public int getId() {
-    //     return id;
-    // }
-    
-    // public void setId(int id) {
-    //     this.id = id;
-    // }
-    
-    // public int getSubmitTime() {
-    //     return submitTime;
-    // }
-    
-    // public void setSubmitTime(int submitTime) {
-    //     this.submitTime = submitTime;
-    // }
-    
-    public int getCPUTime() {
-        return CPUTime;
+
+    public int getBurstTime() {
+        return burstTime;
     }
-    
-    public void setCPUTime(int cPUTime) {
-        CPUTime = cPUTime;
+
+    public void setBurstTime(int burstTime) {
+        this.burstTime = burstTime;
     }
-    
-    public int getCPUTimeLeft() {
-        return CPUTimeLeft;
+
+    public int getRemainBurstTime() {
+        return remainBurstTime;
     }
-    
-    public void setCPUTimeLeft(int cPUTimeLeft) {
-        CPUTimeLeft = cPUTimeLeft;
+
+    public void setRemainBurstTime(int remainBurstTime) {
+        this.remainBurstTime = remainBurstTime;
     }
-    
-    public int getStartTime() {
-        return startTime;
+
+    public int getWaitingTime() {
+        return waitingTime;
     }
-    
-    public void setStartTime(int startTime) {
-        this.startTime = startTime;
+
+    public void setWaitingTime(int waitingTime) {
+        this.waitingTime = waitingTime;
     }
-    
-    public int getEndTime() {
-        return endTime;
+
+    public int getTurnAroundTime() {
+        return turnAroundTime;
     }
-    
-    public void setEndTime(int endTime) {
-        this.endTime = endTime;
+
+    public void setTurnAroundTime(int turnAroundTime) {
+        this.turnAroundTime = turnAroundTime;
     }
-    
-    public int getArrivalTime() {
-        return arrivalTime;
-    }
-    
-    public void setArrivalTime(int arrivalTime) {
-        this.arrivalTime = arrivalTime;
-    }
-    
-    public int getCpuTime() {
-        return cpuTime;
-    }
-    
-    public void setCpuTime(int cpuTime) {
-        this.cpuTime = cpuTime;
-    }
-    
-    public int getProcessId() {
-        return processId;
-    }
-    
-    public void setProcessId(int processId) {
-        this.processId = processId;
-    }
-    
-    
+
+    @Override
+    public String toString() {
+        return "Process [burstTime=" + burstTime + ", processID=" + processID + ", turnAroundTime=" + turnAroundTime
+                + ", waitingTime=" + waitingTime + "]";
+    }    
 }
 
 
