@@ -38,7 +38,7 @@ public class CPUScheduler implements Runnable {
                 this.currentTimeSlot = 0;
                 // pIndex = (pIndex + 1) % this.readyQueue.size();
 
-                this.readyQueue.get(pIndex).setTurnAroundTime(currentTime);
+                this.readyQueue.get(pIndex).setTurnAroundTime(currentTime- readyQueue.get(pIndex).getArrivalTime());
                 this.readyQueue.get(pIndex).setWaitingTime(
                         readyQueue.get(pIndex).getTurnAroundTime() - readyQueue.get(pIndex).getBurstTime());
                 System.out.println(readyQueue.get(pIndex).toString());
