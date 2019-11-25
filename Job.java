@@ -1,14 +1,10 @@
 public class Job {
-    int processID;
-    int burstTime;
-    int remainBurstTime;
-    int waitingTime;
-    int turnAroundTime;
+    private int processID, burstTime, remainBurstTime, waitingTime, turnAroundTime, arrivalTime;
 
-    public Job(int processID, int burstTime) {
+    public Job(int processID, int arrival, int burstTime) {
         this.processID = processID;
         this.burstTime = burstTime;
-
+        this.arrivalTime = arrival;
         this.remainBurstTime = burstTime;
     }
 
@@ -18,6 +14,10 @@ public class Job {
 
     public void setProcessID(int processID) {
         this.processID = processID;
+    }
+
+    public int getArrivalTime() {
+        return arrivalTime;
     }
 
     public int getBurstTime() {
