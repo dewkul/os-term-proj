@@ -10,11 +10,11 @@ public class CPUScheduler implements Runnable {
     int totalBurstTime = 0;
     int totalWaitingTime = 0;
     int totalTurnaround = 0;
-    static ArrayList<Job> readyQueue;
+    ReadyQueue readyQueue;
     // static ReadyQueue readyQueue;
 
-    public CPUScheduler(int timeQuantum) {
-        CPUScheduler.readyQueue = new ArrayList<Job>();
+    public CPUScheduler(ReadyQueue Rqueue, int timeQuantum) {
+        this.readyQueue = Rqueue;
         this.timeQuantum = timeQuantum;
     }
     @Override
