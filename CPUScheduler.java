@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class CPUScheduler implements Runnable {
     int timeQuantum;
@@ -10,57 +11,86 @@ public class CPUScheduler implements Runnable {
     int totalBurstTime = 0;
     int totalWaitingTime = 0;
     int totalTurnaround = 0;
-    ReadyQueue readyQueue;
-    // static ReadyQueue readyQueue;
 
-    public CPUScheduler(ReadyQueue Rqueue, int timeQuantum) {
+    // For Gantt Chart
+    List<Integer> procIdSeq, execTimeSeq;
+
+    ReadyQueue readyQueue;
+
+    public CPUScheduler(ReadyQueue Rqueue, int timeQuantum, List<Integer> procId, List<Integer> execTime) {
         this.readyQueue = Rqueue;
         this.timeQuantum = timeQuantum;
+        this.procIdSeq = procId;
+        this.execTimeSeq = execTime;
     }
     @Override
     public void run() {
-        this.nProcess = readyQueue.size();
-        for (final Job x : this.readyQueue) {
-            this.totalBurstTime += x.getBurstTime();
-        }
-
-        while (!readyQueue.isEmpty()) {
-            System.out.println("Current Time: " + this.currentTime + " CPU is running processID:"
-                    + this.readyQueue.get(pIndex).getProcessID());
-            // reduce remain burst time of the process by 1 and add time
-            readyQueue.get(pIndex).setRemainBurstTime(readyQueue.get(pIndex).getRemainBurstTime() - 1);
-
-            currentTime++;
-            currentTimeSlot++;
-
-            // the process is completed
-            if (this.readyQueue.get(pIndex).getRemainBurstTime() == 0) {
-                this.currentTimeSlot = 0;
-                // pIndex = (pIndex + 1) % this.readyQueue.size();
-
-                this.readyQueue.get(pIndex).setTurnAroundTime(currentTime- readyQueue.get(pIndex).getArrivalTime());
-                this.readyQueue.get(pIndex).setWaitingTime(
-                        readyQueue.get(pIndex).getTurnAroundTime() - readyQueue.get(pIndex).getBurstTime());
-                System.out.println(readyQueue.get(pIndex).toString());
-
-                totalWaitingTime += readyQueue.get(pIndex).getTurnAroundTime() - readyQueue.get(pIndex).getBurstTime();
-                totalTurnaround += currentTime;
-
-                this.readyQueue.remove(pIndex);
-
-                if (this.readyQueue.size() == 1) {
-                    this.pIndex = 0;
+        while(true) {
+            try {
+                waitForJob();
+                this.nProcess = readyQueue.size();
+                for (final Job x : this.readyQueue) {
+                    this.totalBurstTime += x.getBurstTime();
                 }
-            }
-            // exceed limit of time quantum
-            if (this.currentTimeSlot >= this.timeQuantum) {
-                this.currentTimeSlot = 0;
-                pIndex = (pIndex + 1) % this.readyQueue.size();
+
+                System.out.println("Current Time: " + this.currentTime + " CPU is running processID: "
+                        + this.readyQueue.get(pIndex).getProcessID());
+                // reduce remain burst time of the process by 1 and add time
+                readyQueue.get(pIndex).setRemainBurstTime(readyQueue.get(pIndex).getRemainBurstTime() - 1);
+
+                currentTime++;
+                currentTimeSlot++;
+
+                // the process is completed
+                if (this.readyQueue.get(pIndex).getRemainBurstTime() == 0) {
+                    procIdSeq.add(Integer.valueOf(this.readyQueue.get(pIndex).getProcessID()));
+                    execTimeSeq.add(Integer.valueOf(this.currentTimeSlot));
+                    
+                    this.currentTimeSlot = 0;
+                    // pIndex = (pIndex + 1) % this.readyQueue.size();
+
+                    this.readyQueue.get(pIndex).setTurnAroundTime(currentTime- readyQueue.get(pIndex).getArrivalTime());
+                    this.readyQueue.get(pIndex).setWaitingTime(
+                            readyQueue.get(pIndex).getTurnAroundTime() - readyQueue.get(pIndex).getBurstTime());
+                    System.out.println(readyQueue.get(pIndex).toString());
+
+                    totalWaitingTime += readyQueue.get(pIndex).getTurnAroundTime() - readyQueue.get(pIndex).getBurstTime();
+                    totalTurnaround += currentTime;
+
+                    this.readyQueue.remove(pIndex);
+
+                    if (this.readyQueue.size() == 1) {
+                        this.pIndex = 0;
+                    }
+                }
+                // exceed limit of time quantum
+                if (this.currentTimeSlot >= this.timeQuantum) {
+                    procIdSeq.add(Integer.valueOf(this.readyQueue.get(pIndex).getProcessID()));
+                    execTimeSeq.add(Integer.valueOf(this.currentTimeSlot));
+
+                    this.currentTimeSlot = 0;
+                    pIndex = (pIndex + 1) % this.readyQueue.size();
+                }
+                System.out.println("Average waiting time = " + (float) totalWaitingTime / (float) nProcess);
+                System.out.println("Average turn around time = " + (float) totalTurnaround / (float) nProcess);
+                System.out.println("Total burst time = " + totalBurstTime); 
+ 
+            } catch(InterruptedException ex) {
+                ex.printStackTrace();
             }
         }
-
-        System.out.println("Average waiting time = " + (float) totalWaitingTime / (float) nProcess);
-        System.out.println("Average turn around time = " + (float) totalTurnaround / (float) nProcess);
-        System.out.println("Total burst time = " + totalBurstTime);
+            
+                  
     }
+
+    private void waitForJob() throws InterruptedException{
+        synchronized (readyQueue) {
+            while (readyQueue.isEmpty()) {
+                System.out.println("CPU Sched is waiting");
+                readyQueue.wait();
+            }
+        }
+    }
+
 }
+

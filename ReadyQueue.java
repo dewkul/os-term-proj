@@ -26,6 +26,5 @@ public class ReadyQueue extends ArrayList<Job> {
         }
         return true;
     }
-
     
 }

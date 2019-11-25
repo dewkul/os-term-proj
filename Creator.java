@@ -1,12 +1,17 @@
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Queue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Creator implements Runnable {
     // AtomicInteger i;
+    private final int MAX_CAP = 1;
     ArrayList<Job> jobQueue;
+    Queue queue;
 
-    Creator(ArrayList<Job> jQueue, final ArrayList<Job> queue){
+    Creator(final Queue q, ArrayList<Job> jQueue){
         this.jobQueue = jQueue;
+        this.queue = q;
     }
 
     // Creator(AtomicInteger i){
@@ -15,16 +20,31 @@ public class Creator implements Runnable {
 
     @Override
     public void run(){
-        System.out.println("Running...");
-        // while(i.intValue() < 10){
-        //     System.out.print(" " + i);
-        //     i.incrementAndGet();
-        // }
+        // System.out.println("Creator: Running...");
+        try{
+            Iterator<Job> itr = queue.iterator();
+            while (itr.hasNext())
+                addJob(itr.next());
+            
+            Thread.sleep(7000);
 
-        // for(int i = 0; i < queue.size(); i++) {
-        //     jobQueue.add(queue.get(i));
-        //     System.out.println("Thread " + queue.get(i).getProcessID() + " is put to the job queue");
-        // }
-        System.out.println("Exit...");
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+        // System.out.println("Creator: Exit...");
+    }
+
+    private void addJob(Job j) throws InterruptedException {
+        synchronized (jobQueue){
+            while (jobQueue.size() == MAX_CAP){
+                // System.out.println("Job Queue is FULL " + Thread.currentThread().getName() + " is waiting , size: " + jobQueue.size());
+                jobQueue.wait();
+            }
+
+            // Thread.sleep(500);
+            jobQueue.add(j);
+            System.out.println("Thread " + j.getProcessID() + " is put to the job queue");
+            jobQueue.notifyAll();
+        }
     }
 }

@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
-public class JobScheduler {
-    ArrayList<Job> jobQueue
+public class JobScheduler implements Runnable {
+    ArrayList<Job> jobQueue;
     ReadyQueue readyQueue;
 
     public JobScheduler(ArrayList<Job> jQueue, ReadyQueue rQueue){
@@ -12,11 +12,39 @@ public class JobScheduler {
     @Override
     public void run() {
         while(true) {
-            if(!jobQueue.isEmpty()){
-                System.out.println("Thread " + jobQueue.get(0).getProcessID() + " is moved to the ready queue");
-                CPUScheduler.readyQueue.add(new Job( jobQueue.get(0).getProcessID(), jobQueue.get(0).getArrivalTime(), jobQueue.get(0).getBurstTime() ));
-                jobQueue.remove(0);
+            try {
+                addReady(removeJob());
+            } catch (InterruptedException ex){
+                ex.printStackTrace();
             }
+        }
+    }
+
+    private Job removeJob() throws InterruptedException {
+        synchronized (jobQueue) {
+            while (jobQueue.isEmpty()){
+                // System.out.println("Queue is empty " + Thread.currentThread().getName() + " is waiting , size: " + jobQueue.size());
+                jobQueue.wait();
+            }
+            // Thread.sleep(500);
+            Job j = jobQueue.remove(0);
+            // System.out.println("Sched: remove " + j.getProcessID());
+        
+            jobQueue.notifyAll();
+            return j;
+        }
+        
+
+    }
+
+    private void addReady(Job j) throws InterruptedException {
+        synchronized (readyQueue) {
+            // Thread.sleep(500);
+            readyQueue.add(j);
+            System.out.println("Thread " + j.getProcessID() + " is moved to the ready queue");
+            // if (jobQueue.isEmpty())
+                // System.out.println("!!!!! Notify CPU");
+            readyQueue.notifyAll();
         }
     }
 
