@@ -1,13 +1,13 @@
 import java.util.ArrayList;
 
-public class ReadyQueue extends ArrayList<Process> {
+public class ReadyQueue extends ArrayList<Job> {
 
     public ReadyQueue() {
         super();
     }
 
     @Override
-    public boolean add(Process e) {
+    public boolean add(Job e) {
         int i;
 
         if(super.size() == 0 || super.get(0).getArrivalTime() >= e.getArrivalTime()){
