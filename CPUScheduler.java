@@ -14,7 +14,7 @@ public class CPUScheduler implements Runnable {
         this.readyQueue = readyQueue;
         this.timeQuantum = timeQuantum;
     }
-
+    @Override
     public void run() {
         this.nProcess = readyQueue.size();
         for (final Process x : this.readyQueue) {
