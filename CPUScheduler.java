@@ -11,6 +11,7 @@ public class CPUScheduler implements Runnable {
     int totalWaitingTime = 0;
     int totalTurnaround = 0;
     static ArrayList<Job> readyQueue;
+    // static ReadyQueue readyQueue;
 
     public CPUScheduler(int timeQuantum) {
         CPUScheduler.readyQueue = new ArrayList<Job>();
