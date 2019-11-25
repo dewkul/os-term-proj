@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-public class ReadyQueue extends ArrayList<Process> {
+public class ReadyQueue extends ArrayList<Job> {
 
     public ReadyQueue() {
         super();
