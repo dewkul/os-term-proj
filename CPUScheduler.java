@@ -1,4 +1,4 @@
-public class CPUScheduler implements Runnable{
+public class CPUScheduler implements Runnable {
     ReadyQueue readyQueue;
     int timeQuantum;
     int currentTime = 0;
@@ -14,7 +14,8 @@ public class CPUScheduler implements Runnable{
         this.readyQueue = readyQueue;
         this.timeQuantum = timeQuantum;
     }
-    public void run(){
+
+    public void run() {
         this.nProcess = readyQueue.size();
         for (final Process x : this.readyQueue) {
             this.totalBurstTime += x.getBurstTime();
@@ -28,7 +29,7 @@ public class CPUScheduler implements Runnable{
 
             currentTime++;
             currentTimeSlot++;
-            
+
 // the process is completed
             if (this.readyQueue.get(pIndex).getRemainBurstTime() == 0) {
                 this.currentTimeSlot = 0;
@@ -44,7 +45,7 @@ public class CPUScheduler implements Runnable{
 
                 this.readyQueue.remove(pIndex);
 
-                if(this.readyQueue.size() == 1){
+                if (this.readyQueue.size() == 1) {
                     this.pIndex = 0;
                 }
             }
@@ -59,4 +60,4 @@ public class CPUScheduler implements Runnable{
         System.out.println("Average turn around time = " + (float) totalTurnaround / (float) nProcess);
         System.out.println("Total burst time = " + totalBurstTime);
     }
-}s
+}
