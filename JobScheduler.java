@@ -3,10 +3,12 @@ import java.util.ArrayList;
 public class JobScheduler implements Runnable {
     ArrayList<Job> jobQueue;
     ReadyQueue readyQueue;
+    boolean start;
 
     public JobScheduler(ArrayList<Job> jQueue, ReadyQueue rQueue){
         this.jobQueue = jQueue;
         this.readyQueue = rQueue;
+        this.start = false;
     }
 
     @Override
@@ -28,6 +30,7 @@ public class JobScheduler implements Runnable {
             }
             // Thread.sleep(500);
             Job j = jobQueue.remove(0);
+            this.start = true;
             // System.out.println("Sched: remove " + j.getProcessID());
         
             jobQueue.notifyAll();
@@ -43,8 +46,11 @@ public class JobScheduler implements Runnable {
             readyQueue.add(j);
             System.out.println("Thread " + j.getProcessID() + " is moved to the ready queue");
             // if (jobQueue.isEmpty())
-                // System.out.println("!!!!! Notify CPU");
-            readyQueue.notifyAll();
+            //      
+            if (jobQueue.isEmpty() && this.start){
+                System.out.println("!!!!! Notify CPU");
+                readyQueue.notifyAll();
+            }
         }
     }
 
