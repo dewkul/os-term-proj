@@ -1,5 +1,6 @@
+import java.util.ArrayList;
+
 public class CPUScheduler implements Runnable {
-    ReadyQueue readyQueue;
     int timeQuantum;
     int currentTime = 0;
     int currentTimeSlot = 0;
@@ -9,15 +10,16 @@ public class CPUScheduler implements Runnable {
     int totalBurstTime = 0;
     int totalWaitingTime = 0;
     int totalTurnaround = 0;
+    static ArrayList<Job> readyQueue;
 
-    public CPUScheduler(final ReadyQueue readyQueue, final int timeQuantum) {
-        this.readyQueue = readyQueue;
+    public CPUScheduler(int timeQuantum) {
+        CPUScheduler.readyQueue = new ArrayList<Job>();
         this.timeQuantum = timeQuantum;
     }
     @Override
     public void run() {
         this.nProcess = readyQueue.size();
-        for (final Process x : this.readyQueue) {
+        for (final Job x : this.readyQueue) {
             this.totalBurstTime += x.getBurstTime();
         }
 
@@ -30,7 +32,7 @@ public class CPUScheduler implements Runnable {
             currentTime++;
             currentTimeSlot++;
 
-// the process is completed
+            // the process is completed
             if (this.readyQueue.get(pIndex).getRemainBurstTime() == 0) {
                 this.currentTimeSlot = 0;
                 // pIndex = (pIndex + 1) % this.readyQueue.size();
