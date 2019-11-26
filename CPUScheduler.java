@@ -37,7 +37,7 @@ public class CPUScheduler implements Runnable {
             //System.out.println(this.execTimeSeq);
             while (!readyQueue.isEmpty()) {
                 //System.out.println(this.readyQueue.toString());
-                Thread.sleep(500);//-----------------------------
+                Thread.sleep(200);//-----------------------------
                 System.out.println("Current Time: " + this.currentTime + " CPU is running processID: "
                         + this.readyQueue.get(pIndex).getProcessID());
                 // reduce remain burst time of the process by 1 and add time
@@ -62,8 +62,20 @@ public class CPUScheduler implements Runnable {
                     totalWaitingTime += readyQueue.get(pIndex).getTurnAroundTime() - readyQueue.get(pIndex).getBurstTime();
                     totalTurnaround += currentTime;
 
+                    for(int i = 0; i< this.readyQueue.size(); i++){
+                        pIndex = (pIndex + 1) % this.readyQueue.size();
+                        if(readyQueue.get(pIndex).getStatusDone()){ pIndex = (pIndex + 1) % this.readyQueue.size(); break;}
+                        if(!readyQueue.get(pIndex).getStatusDone()){//herer--------------------------------------------
+                            if(readyQueue.get(pIndex).getArrivalTime() <= currentTime){
+                                break;
+                            }
+                        }
+                    }
+
                 }
-            
+
+
+
                 // exceed limit of time quantum
                 if (this.currentTimeSlot >= this.timeQuantum) {
                     procIdSeq.add(Integer.valueOf(this.readyQueue.get(pIndex).getProcessID()));
@@ -96,6 +108,7 @@ public class CPUScheduler implements Runnable {
                         }
                     }
                 }
+                
                 int allCaseDone = 1;
                 for(int i = 0; i< this.readyQueue.size(); i++){
                 if(!readyQueue.get(i).getStatusDone()){allCaseDone = 0;}
