@@ -31,9 +31,13 @@ public class CPUScheduler implements Runnable {
             for (final Job x : this.readyQueue) {
                 this.totalBurstTime += x.getBurstTime();
             }
-
+            //System.out.println(this.readyQueue.toString());
+            //System.out.println(this.timeQuantum);
+            //System.out.println(this.procIdSeq);
+            //System.out.println(this.execTimeSeq);
             while (!readyQueue.isEmpty()) {
-
+                //System.out.println(this.readyQueue.toString());
+                Thread.sleep(500);//-----------------------------
                 System.out.println("Current Time: " + this.currentTime + " CPU is running processID: "
                         + this.readyQueue.get(pIndex).getProcessID());
                 // reduce remain burst time of the process by 1 and add time
@@ -53,7 +57,8 @@ public class CPUScheduler implements Runnable {
                     this.readyQueue.get(pIndex).setWaitingTime(
                             readyQueue.get(pIndex).getTurnAroundTime() - readyQueue.get(pIndex).getBurstTime());
                     System.out.println(readyQueue.get(pIndex).toString());
-
+                    readyQueue.get(pIndex).setStatusTrue();
+                    //System.out.println(readyQueue.get(pIndex).getStatusDone());
                     totalWaitingTime += readyQueue.get(pIndex).getTurnAroundTime() - readyQueue.get(pIndex).getBurstTime();
                     totalTurnaround += currentTime;
 
@@ -69,9 +74,10 @@ public class CPUScheduler implements Runnable {
                     // finding the next process to run that aready arrived
                     for(int i = 0; i< this.readyQueue.size(); i++){
                         pIndex = (pIndex + 1) % this.readyQueue.size();
-
-                        if(readyQueue.get(pIndex).getArrivalTime() <= currentTime){
-                            break;
+                        if(!readyQueue.get(pIndex).getStatusDone()){//herer--------------------------------------------
+                            if(readyQueue.get(pIndex).getArrivalTime() <= currentTime){
+                                break;
+                            }
                         }
                     }
 
@@ -89,6 +95,14 @@ public class CPUScheduler implements Runnable {
                             currentTime++;
                         }
                     }
+                }
+                int allCaseDone = 1;
+                for(int i = 0; i< this.readyQueue.size(); i++){
+                if(!readyQueue.get(i).getStatusDone()){allCaseDone = 0;}
+                }
+                if(allCaseDone == 1){
+                    System.out.println("Done");
+                    break;
                 }
             }
         } catch(InterruptedException ex) {

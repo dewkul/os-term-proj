@@ -38,11 +38,16 @@ public class Main{
         ReadyQueue readyQueue = new ReadyQueue();
         // AtomicInteger time = new AtomicInteger();
         Queue<Job> queue = new LinkedList<Job>();
-        queue.add(new Job(0, 0, 3));
-        queue.add(new Job(1, 0, 8));
-        queue.add(new Job(2, 0, 4));
+        // queue.add(new Job(0, 0, 3));
+        // queue.add(new Job(1, 0, 8));
+        // queue.add(new Job(2, 0, 4));
 
-        int timeQuantum = 3;
+        // int timeQuantum = 3;
+        queue.add(new Job(0, 0, 5)); //id, arrival time, brust time
+        queue.add(new Job(1, 1, 9));
+        queue.add(new Job(2, 10, 2));
+
+        int timeQuantum = 2;
         
         Thread creator = new Thread(new Creator(queue, jobQueue));
         Thread jobSched = new Thread(new JobScheduler(jobQueue, readyQueue));

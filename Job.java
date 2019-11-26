@@ -1,12 +1,17 @@
 public class Job {
     private int processID, burstTime, remainBurstTime, waitingTime, turnAroundTime, arrivalTime;
-
+    private boolean statusDone;
     public Job(int processID, int arrival, int burstTime) {
         this.processID = processID;
         this.burstTime = burstTime;
         this.arrivalTime = arrival;
         this.remainBurstTime = burstTime;
+        this.statusDone = false; //false : working, true : Done
     }
+
+    public void setStatusTrue(){ this.statusDone = true;}
+    public void setStatusFalse(){ this.statusDone = false;}
+    public boolean getStatusDone(){ return this.statusDone; }
 
     public int getProcessID() {
         return processID;
@@ -54,7 +59,7 @@ public class Job {
 
     @Override
     public String toString() {
-        return "Process [burstTime=" + burstTime + ", processID=" + processID + ", turnAroundTime=" + turnAroundTime
+        return "Process [processID=" + processID + ", burstTime=" + burstTime + ", arrivalTime=" + arrivalTime + ", turnAroundTime=" + turnAroundTime
                 + ", waitingTime=" + waitingTime + "]";
     }    
 }
