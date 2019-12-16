@@ -19,7 +19,6 @@ public class GanttChart extends JPanel {
       for (int i=0; i < id.size(); i++){
          proc.add(new ProcBox(id.get(i), sec.get(i), X));
          X = X + ProcBox.SEC_WIDTH * sec.get(i);
-         // System.out.println("GanttChart: X = " + X);
       }
    }
 
@@ -76,7 +75,6 @@ class ProcBox {
 
    public void draw(Graphics g){
       g.drawRect(START_X, START_Y, SEC_WIDTH * sec, RECT_HEIGHT);
-      // System.out.println("ProcBox: x = " + START_X + " " + END_X);
       g.drawString(Integer.toString(id), (START_X + END_X)/2, LABEL_Y - (RECT_HEIGHT*2/3));
       g.drawString(Integer.toString((END_X - GanttChart.MARGIN_X)/SEC_WIDTH), LABEL_X, LABEL_Y);
    }

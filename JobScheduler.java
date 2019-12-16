@@ -25,13 +25,13 @@ public class JobScheduler implements Runnable {
     private Job removeJob() throws InterruptedException {
         synchronized (jobQueue) {
             while (jobQueue.isEmpty()){
-                // System.out.println("Queue is empty " + Thread.currentThread().getName() + " is waiting , size: " + jobQueue.size());
+               
                 jobQueue.wait();
             }
             // Thread.sleep(500);
             Job j = jobQueue.remove(0);
             this.start = true;
-            // System.out.println("Sched: remove " + j.getProcessID());
+
         
             jobQueue.notifyAll();
             return j;
@@ -45,10 +45,8 @@ public class JobScheduler implements Runnable {
             // Thread.sleep(500);
             readyQueue.add(j);
             System.out.println("Thread " + j.getProcessID() + " is moved to the ready queue");
-            // if (jobQueue.isEmpty())
-            //      
+             
             if (jobQueue.isEmpty() && this.start){
-                System.out.println("!!!!! Notify CPU");
                 readyQueue.notifyAll();
             }
         }

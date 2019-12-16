@@ -8,45 +8,25 @@ import java.util.Queue;
 
 
 public class Main{
-    // Job Queue will be in JobSched
-    // private static final BlockingQueue<Runnable> queue = new ArrayBlockingQueue<>(15);
     public static void main(String[] args) {
-        // Thread t = new Thread(() -> {
-        //     while (true) {
-        //         try {
-        //             queue.take().run();
-        //         } catch (InterruptedException e) {
-        //             e.printStackTrace();
-        //         }
-    
-        //     }
-        // });
-        // t.start();
-        // queue.add(() -> {
-        //     Job j1 = new Job(1, 0, 8);  // processId, arrivalTime, cpuTime(burst)
-        // });
-        // queue.add(() -> {
-        //     Job j2 = new Job(2, 0, 10);
-        // });
-        // queue.add(() -> {
-        //     Job j3 = new Job(3, 4, 8);
-        // });
+        
         List<Integer> proc_id =  new ArrayList<Integer>();
         List<Integer> exec_time =  new ArrayList<Integer>();
 
         ArrayList<Job> jobQueue = new ArrayList<Job>();
         ReadyQueue readyQueue = new ReadyQueue();
-        // AtomicInteger time = new AtomicInteger();
         Queue<Job> queue = new LinkedList<Job>();
-        // queue.add(new Job(0, 0, 3));
-        // queue.add(new Job(1, 0, 8));
+         
+        // TO DO: Add Job Here!!
+        // queue.add(new Job(0, 0, 3));   
+        // queue.add(new Job(1, 5, 8));
         // queue.add(new Job(2, 0, 4));
-
-        // int timeQuantum = 3;
-        queue.add(new Job(0, 0, 5)); //id, arrival time, brust time
+       
+        queue.add(new Job(0, 0, 15));   //id, arrival time, brust time
         queue.add(new Job(1, 1, 9));
-        queue.add(new Job(2, 10, 2));
+        queue.add(new Job(2, 10, 4));
 
+        // TO DO: Set time quantum Here!!
         int timeQuantum = 2;
         
         Thread creator = new Thread(new Creator(queue, jobQueue));
@@ -56,23 +36,5 @@ public class Main{
         jobSched.start();
         cpuSched.start();
 
-        try {
-            System.out.println("Waiting for threads to finish.");
-            creator.join();
-          } catch (InterruptedException e) {
-            System.out.println("Thread Interrupted");
-          }
-
-        GanttChart g = new GanttChart();
-
-        // Required data for Gantt Chart
-        // List<Integer> proc_id =     Arrays.asList(0, 1, 2, 0, 1, 2, 1, 2, 2);
-        // List<Integer> exec_time =   Arrays.asList(3, 3, 3, 2, 3, 3, 1, 3, 1);
-        g.addAllProc(proc_id, exec_time);
-        g.display();
-        
-        for (Job j: readyQueue) {
-            System.out.println("End " + j.getProcessID());
-          }
      }
 }

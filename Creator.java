@@ -26,7 +26,6 @@ public class Creator implements Runnable {
             while (itr.hasNext())
                 addJob(itr.next());
             
-            Thread.sleep(1000);
 
         } catch (InterruptedException ex) {
             ex.printStackTrace();
@@ -41,7 +40,7 @@ public class Creator implements Runnable {
                 jobQueue.wait();
             }
 
-            // Thread.sleep(500);
+            Thread.sleep(500);
             jobQueue.add(j);
             System.out.println("Thread " + j.getProcessID() + " is put to the job queue");
             jobQueue.notifyAll();

@@ -14,6 +14,7 @@ public class CPUScheduler implements Runnable {
 
     // For Gantt Chart
     List<Integer> procIdSeq, execTimeSeq;
+    GanttChart g = new GanttChart();
 
     ReadyQueue readyQueue;
 
@@ -53,7 +54,7 @@ public class CPUScheduler implements Runnable {
                     
                     this.currentTimeSlot = 0;
                     // pIndex = (pIndex + 1) % this.readyQueue.size();
-
+                    this.readyQueue.get(pIndex).setTurnAroundTime(currentTime-readyQueue.get(pIndex).getArrivalTime());
                     this.readyQueue.get(pIndex).setWaitingTime(
                             readyQueue.get(pIndex).getTurnAroundTime() - readyQueue.get(pIndex).getBurstTime());
                     System.out.println(readyQueue.get(pIndex).toString());
@@ -117,11 +118,17 @@ public class CPUScheduler implements Runnable {
                     System.out.println("Done");
                     break;
                 }
+            
             }
         } catch(InterruptedException ex) {
             ex.printStackTrace();
         }
+        System.out.println("**yeeeeeeeeeeeeeeeee!!!");
         
+        
+ 
+        g.addAllProc(procIdSeq, execTimeSeq);
+        g.display();
             
                   
     }
@@ -129,7 +136,7 @@ public class CPUScheduler implements Runnable {
     private void waitForJob() throws InterruptedException{
         synchronized (readyQueue) {
             while (readyQueue.isEmpty()) {
-                System.out.println("CPU Sched is waiting");
+                // System.out.println("CPU Sched is waiting");
                 readyQueue.wait();
             }
         }
